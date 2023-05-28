@@ -4,10 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,8 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.jetcoffee.components.CategoryItem
 import com.example.jetcoffee.components.SearchBar
+import com.example.jetcoffee.model.dummyCategory
 import com.example.jetcoffee.ui.theme.JetCoffeeTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +44,7 @@ fun JetCoffeeApp() {
 
 @Composable
 fun Banner(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         Image(
@@ -53,6 +55,29 @@ fun Banner(
         )
         SearchBar()
     }
+}
+
+@Composable
+fun CategoryRow(
+    modifier: Modifier = Modifier,
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        items(dummyCategory, key = { it.textCategory }) { category ->
+            CategoryItem(category = category)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CategoryRowPreview() {
+    JetCoffeeTheme {
+        CategoryRow()
+    }
+
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
