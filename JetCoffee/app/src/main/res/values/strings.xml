@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">JetCoffee</string>
-    <string name="placeholder_search">Cari kopi pilihanmu!</string>
     <string name="category_all">All</string>
     <string name="category_americano">Americano</string>
     <string name="category_cappuccino">Cappuccino</string>
@@ -15,4 +14,5 @@
     <string name="menu_home">Home</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_profile">Profile</string>
+    <string name="placeholder_search">Cari kopi pilihanmu!</string>
 </resources>
