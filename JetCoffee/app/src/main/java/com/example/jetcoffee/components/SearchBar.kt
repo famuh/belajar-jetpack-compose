@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.example.jetcoffee.R
 import com.example.jetcoffee.ui.theme.JetCoffeeTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,

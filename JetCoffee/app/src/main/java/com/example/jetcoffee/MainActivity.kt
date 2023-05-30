@@ -9,9 +9,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -20,16 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.jetcoffee.components.CategoryItem
-import com.example.jetcoffee.components.MenutItem
-import com.example.jetcoffee.components.SearchBar
-import com.example.jetcoffee.components.SectionText
-import com.example.jetcoffee.model.Menu
-import com.example.jetcoffee.model.dummyBestSellerMenu
-import com.example.jetcoffee.model.dummyCategory
-import com.example.jetcoffee.model.dummyMenu
+import com.example.jetcoffee.components.*
+import com.example.jetcoffee.model.*
 import com.example.jetcoffee.ui.theme.JetCoffeeTheme
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,17 +40,38 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JetCoffeeApp() {
-    Column(
-        modifier = Modifier.verticalScroll(rememberScrollState())
-    ) {
-        Banner()
-        SectionText(stringResource(id = R.string.section_category))
-        CategoryRow()
-        SectionText(stringResource(id = R.string.section_favorite_menu))
-        MenuRow(listMenu = dummyMenu)
-        SectionText(title = stringResource(id = R.string.section_best_seller_menu))
-        MenuRow(listMenu = dummyBestSellerMenu)
+    Scaffold(
+        bottomBar = { BottomBar() }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
+        ) {
+            Banner()
+            // Pada bagian kategori, merupakan contoh penggunaan named parameter.
+            // RECCOMENDATION !!!
+            HomeSection(
+                title = stringResource(id = R.string.section_category),
+                content = { CategoryRow() }
+            )
+
+            // Pada bagian menu favorit, memasukkan argument satu per satu.
+            HomeSection(
+                stringResource(id = R.string.section_favorite_menu),
+                Modifier
+            ) {
+                MenuRow(listMenu = dummyMenu)
+            }
+
+            // Pada bagian menu terlaris, jika lambda ada di akhir parameter, ia dapat dikeluarkan setelah parenthesis.
+            HomeSection(stringResource(id = R.string.section_best_seller_menu)) {
+                MenuRow(listMenu = dummyBestSellerMenu)
+            }
+
+        }
     }
+
 }
 
 @Composable
@@ -99,6 +115,51 @@ fun MenuRow(
     ) {
         items(dummyMenu, key = { it.title }) { menu ->
             MenutItem(menu = menu)
+        }
+    }
+}
+
+
+@Composable
+fun BottomBar(
+    modifier: Modifier = Modifier,
+) {
+    NavigationBar(
+        contentColor = MaterialTheme.colorScheme.primary,
+        containerColor = MaterialTheme.colorScheme.background,
+        modifier = modifier,
+
+    ) {
+        val navigationItems = listOf(
+            BottomBarItem(
+                title = stringResource(R.string.menu_home),
+                icon = Icons.Default.Home
+            ),
+            BottomBarItem(
+                title = stringResource(R.string.menu_favorite),
+                icon = Icons.Default.Favorite
+            ),
+            BottomBarItem(
+                title = stringResource(R.string.menu_profile),
+                icon = Icons.Default.AccountCircle
+            ),
+        )
+        navigationItems.map {
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = it.icon,
+                        contentDescription = it.title
+                    )
+                },
+
+                label = {
+                    Text(it.title)
+                },
+
+                selected = it.title == navigationItems[0].title,
+                onClick = {}
+            )
         }
     }
 }
