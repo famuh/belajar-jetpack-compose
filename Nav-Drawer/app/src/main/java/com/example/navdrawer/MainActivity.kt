@@ -1,6 +1,7 @@
 package com.example.navdrawer
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -64,10 +65,25 @@ fun NavDrawer() {
                     scope.launch {
                         // ketika item di klik drawer menutup
                         scaffoldState.drawerState.close()
-                        scaffoldState.snackbarHostState.showSnackbar(
+
+                        val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
                             message = context.resources.getString(R.string.coming_soon, title),
                             actionLabel = context.resources.getString(R.string.subscribe_question)
                         )
+
+                        if (snackbarResult == SnackbarResult.ActionPerformed) {
+                            Toast.makeText(
+                                context,
+                                context.resources.getString(R.string.subscribed_info),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else if (snackbarResult == SnackbarResult.Dismissed){
+                            // Do Nothing
+                            // ketika snackbar diabaikan
+                        }
+
+
+
                     }
                 })
         },
