@@ -1,6 +1,7 @@
 package com.example.navdrawer
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
@@ -47,57 +48,29 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavDrawer() {
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
+    val appState = rememberMyNavDrawerState()
 
     Scaffold(
-        scaffoldState = scaffoldState,
+        scaffoldState = appState.scaffoldState,
         topBar = {
             MyTopBar(
-                onMenuClick = {
-                    // membuka drawer
-                    scope.launch { scaffoldState.drawerState.open() }
-                }
+               onMenuClick = appState::onMenuClick
             )
         },
         drawerContent = {
             MyDrawerContent(
-                onItemSelected = { title ->
-                    scope.launch {
-                        // ketika item di klik drawer menutup
-                        scaffoldState.drawerState.close()
-
-                        val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
-                            message = context.resources.getString(R.string.coming_soon, title),
-                            actionLabel = context.resources.getString(R.string.subscribe_question)
-                        )
-
-                        if (snackbarResult == SnackbarResult.ActionPerformed) {
-                            Toast.makeText(
-                                context,
-                                context.resources.getString(R.string.subscribed_info),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else if (snackbarResult == SnackbarResult.Dismissed){
-                            // Do Nothing
-                            // ketika snackbar diabaikan
-                        }
-                    }
-                },
-                onBackPressed = {
-                    if (scaffoldState.drawerState.isOpen) {
-                        scope.launch {
-                            scaffoldState.drawerState.close()
-                        }
-                    }
-                }
+//                Function reference juga dapat membaca satu parameter
+//                dan langsung memasukkannya pada fungsi yang dipanggil tanpa menuliskannya.
+//                Contohnya ada pada appState::onItemSelected yang tidak perlu menuliskan
+//                parameter title: String.
+                onItemSelected = appState::onItemSelected,
+                onBackPressed = appState::onBackPressed
 
             )
 
         },
 
-        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerGesturesEnabled = appState.scaffoldState.drawerState.isOpen,
     ) { paddingValues ->
         Box(
             modifier = Modifier
