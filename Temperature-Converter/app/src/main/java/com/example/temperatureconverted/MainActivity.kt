@@ -1,8 +1,10 @@
 package com.example.temperatureconverted
 
+import android.opengl.Matrix
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,6 +23,12 @@ import androidx.compose.ui.unit.dp
 import com.example.temperatureconverted.ui.theme.TemperatureConvertedTheme
 
 class MainActivity : ComponentActivity() {
+
+    enum class Scale(val scaleName: String) {
+        CELSIUS("Celsius"),
+        FAHRENHEIT("Fahrenheit")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,7 +38,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    StatefulTemperatureInput()
+                    Column {
+                        StatefulTemperatureInput()
+                        ConverterApp()
+                        TwoWayConverter()
+                    }
                 }
             }
         }
@@ -39,8 +51,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun StatefulTemperatureInput(modifier: Modifier = Modifier) {
+
     var input by remember { mutableStateOf("") }
     var output by remember { mutableStateOf("") }
+
     Column(modifier.padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.stateful_converter),
@@ -63,5 +77,100 @@ fun StatefulTemperatureInput(modifier: Modifier = Modifier) {
 fun convertToFahrenheit(celcius: String) =
     celcius.toDoubleOrNull()?.let {
         (it * 9 / 5) + 32
+    }.toString()
+
+
+// state hoisting
+@Composable
+fun StatelessTemperatureInput(
+    input: String,
+    output: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier.padding(16.dp)) {
+        Text(
+            text = stringResource(R.string.stateless_converter),
+            style = MaterialTheme.typography.h5
+        )
+        OutlinedTextField(
+            value = input,
+            label = { Text(stringResource(R.string.enter_celsius)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = onValueChange
+        )
+        Text(stringResource(R.string.temperature_fahrenheit, output))
+    }
+}
+
+@Composable
+private fun ConverterApp(
+    modifier: Modifier = Modifier,
+) {
+    var input by remember { mutableStateOf("") }
+    var output by remember { mutableStateOf("") }
+
+    Column(modifier) {
+        StatelessTemperatureInput(
+            input = input,
+            output = output,
+            onValueChange = { newInput ->
+                input = newInput
+                output = convertToFahrenheit(newInput)
+            })
+    }
+}
+
+@Composable
+fun GeneralComposableInput(
+    scale: MainActivity.Scale,
+    input: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        OutlinedTextField(
+            value = input,
+            onValueChange = onValueChange,
+            label = { Text(stringResource(R.string.enter_temperature, scale.scaleName)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+    }
+}
+
+@Composable
+private fun TwoWayConverter(
+    modifier: Modifier = Modifier,
+) {
+    var celcius by remember { mutableStateOf("") }
+    var fahrenheit by remember { mutableStateOf("") }
+
+    Column(modifier.padding(16.dp)) {
+        Text(
+            text = stringResource(R.string.two_way_converter),
+            style = MaterialTheme.typography.h5
+        )
+        GeneralComposableInput(
+            scale = MainActivity.Scale.CELSIUS,
+            input = celcius,
+            onValueChange = { onChange ->
+                celcius = onChange
+                fahrenheit = convertToFahrenheit(onChange)
+            }
+        )
+        GeneralComposableInput(
+            scale = MainActivity.Scale.FAHRENHEIT,
+            input = fahrenheit,
+            onValueChange = { onChange ->
+                celcius = convertToCelcius(onChange)
+                fahrenheit = onChange
+            }
+        )
+    }
+}
+
+fun convertToCelcius(fahrenheit: String) =
+    fahrenheit.toDoubleOrNull()?.let {
+        (it - 32) * 5 / 9
     }.toString()
 
