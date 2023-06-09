@@ -32,8 +32,15 @@ fun JetRewardApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
-        bottomBar = { BottomBar(navController) },
+        bottomBar = {
+            if (currentRoute != Screen.DetailReward.route) {
+                BottomBar(navController)
+            }
+        },
         modifier = modifier
     ) { innerPadding ->
 
