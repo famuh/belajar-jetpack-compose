@@ -92,14 +92,17 @@ fun DetailContent(
                     painter = painterResource(image),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = modifier.height(400.dp)
+                    modifier = modifier
+                        .height(400.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = stringResource(R.string.back),
-                    modifier = Modifier.padding(16.dp).clickable { onBackClick() }
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clickable { onBackClick() }
                 )
             }
             Column(
@@ -127,7 +130,10 @@ fun DetailContent(
                 )
             }
         }
-        Spacer(modifier = Modifier.fillMaxWidth().height(4.dp).background(LightGray))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(4.dp)
+            .background(LightGray))
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
@@ -136,7 +142,9 @@ fun DetailContent(
                 orderCount,
                 onProductIncreased = { orderCount++ },
                 onProductDecreased = { if (orderCount > 0) orderCount-- },
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 16.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 16.dp)
             )
             totalPoint = basePoint * orderCount
             OrderButton(
@@ -153,14 +161,7 @@ fun DetailContent(
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 fun DetailContentPreview() {
-    JetRewardTheme {
-        DetailContent(
-            R.drawable.reward_4,
-            "Jaket Hoodie Dicoding",
-            7500,
-            1,
-            onBackClick = {},
-            onAddToCart = {}
-        )
+    Column {
+
     }
 }

@@ -66,7 +66,9 @@ fun BookListItem(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { }
+        modifier = modifier.clickable {
+
+        }
     ) {
         AsyncImage(
             model = imageUrl,
