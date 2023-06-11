@@ -1,96 +1,72 @@
 package com.example.booksapp
 
-import androidx.compose.animation.core.tween
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import com.example.booksapp.data.BookRepository
-import com.example.booksapp.model.BooksData
-import com.example.booksapp.model.BooksData.books
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BooksApp(
     modifier: Modifier = Modifier,
-    viewModel: BookViewModel = viewModel(
-        factory = ViewModelFactory(BookRepository())
-    ),
+    navController: NavHostController = rememberNavController(),
 ) {
-    val books by viewModel.books.collectAsState()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    Box(modifier = modifier) {
-        val listState = rememberLazyListState()
+    Scaffold(
+        modifier = modifier
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Screen.Home.route) {
+                HomeScreen(
+                    navigateToDetail = { index ->
+                        navController.navigate(Screen.DetailScreen.createRoute(index))
+                        Log.d("Hm", "Ke detail dgn membawa $index")
+                    })
+            }
 
-        LazyColumn {
-//            items(BooksData.books, key = { it.id }) { book ->
-//                BookListItem(
-//                    name = book.name,
-//                    imageUrl = book.imageUrl,
-//                    modifier = Modifier.fillMaxWidth()
-//                )
-//            }
+            composable(
+                Screen.DetailScreen.route,
+                listOf(navArgument("index") { type = NavType.IntType })
+            ) {
 
-            itemsIndexed(BooksData.books) {index, book ->
-                BookListItem(
-                    name = book.name,
-                    imageUrl = book.imageUrl,
-                    modifier = Modifier.fillMaxWidth()
+                val index = it.arguments?.getInt("index") ?: 0
+                DetailScreen(
+                    itemIndex = index,
+                    navigateBack = { navController.navigateUp() },
+//                        navigateToDetail = {
+//                            navController.navigate("detail")
+//                        }
                 )
+
+//                DetailScreen(
+//                    rewardId = id,
+//                    navigateToCart = {
+//                        navController.popBackStack()
+//                        navController.navigate(Screen.Cart.route) {
+//                            popUpTo(navController.graph.findStartDestination().id) {
+//                                saveState = true
+//                            }
+//                            launchSingleTop = true
+//                            restoreState = true
+//                        }
+//                    }
+//                )
             }
         }
     }
-}
-
-@Composable
-fun BookListItem(
-    name: String,
-    imageUrl: String,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable {
-
-        }
-    ) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(60.dp)
-                .clip(
-                    CircleShape
-                )
-        )
-
-        Text(
-            text = name,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(start = 16.dp)
-        )
-
-    }
-
 }

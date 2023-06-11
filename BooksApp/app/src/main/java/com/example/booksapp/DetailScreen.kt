@@ -26,7 +26,7 @@ fun DetailScreen(
     itemIndex: Int,
     navigateBack: () -> Unit,
 ) {
-    DetailContent(1)
+    DetailContent(itemIndex)
 
 }
 
