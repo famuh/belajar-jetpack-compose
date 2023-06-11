@@ -24,7 +24,6 @@ fun HomeScreen(
     navigateToDetail: (Int) -> Unit,
 ) {
     HomeContent(
-//        modifier = modifier,
         navigateToDetail = navigateToDetail,
     )
 }
@@ -39,7 +38,8 @@ fun HomeContent(
             BookItem(
                 imageUrl = book.imageUrl,
                 name = book.name,
-                modifier = Modifier.clickable {
+                modifier = Modifier
+                    .clickable {
                     navigateToDetail(index)
                     Log.d("Home Screen", "Mengirim $index ke detail")
                 })

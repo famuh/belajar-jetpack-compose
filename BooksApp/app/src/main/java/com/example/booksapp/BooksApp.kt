@@ -3,9 +3,16 @@ package com.example.booksapp
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import coil.compose.AsyncImagePainter.State.Empty.painter
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -24,7 +32,12 @@ fun BooksApp(
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        modifier = modifier
+        modifier = modifier,
+        topBar = {
+            if (currentRoute != Screen.DetailScreen.route) {
+                TopBarNihBoss(navController = navController)
+            }
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -37,6 +50,10 @@ fun BooksApp(
                         navController.navigate(Screen.DetailScreen.createRoute(index))
                         Log.d("Hm", "Ke detail dgn membawa $index")
                     })
+            }
+
+            composable(Screen.Profile.route) {
+                ProfileScreen()
             }
 
             composable(
@@ -69,4 +86,21 @@ fun BooksApp(
             }
         }
     }
+}
+
+@Composable
+fun TopBarNihBoss(
+    navController: NavHostController,
+) {
+    Box(
+        modifier = Modifier.padding(12.dp)) {
+        IconButton(
+            onClick = {
+                // Ke halaman profile
+                navController.navigate(Screen.Profile.route)
+            }) {
+            Icon(imageVector = Icons.Filled.Person, contentDescription = "Profile")
+        }
+    }
+
 }

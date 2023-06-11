@@ -15,7 +15,7 @@ object BooksData {
             2,
             "Rich dad, poor dad",
             "Rich Dad, Poor Dad adalah buku yang membahas masalah finansial yang dihadapi banyak orang dikarenakan ajaran keliru orang tua mereka mengenai keuangan, yang juga dialaminya semasa kecil dan remaja.",
-            "Robert T. Kiyosaki, Sharon L. Lechter",
+            "Robert T. Kiyosaki\nSharon L. Lechter",
             "2000",
             "https://books.google.co.id/books/content?id=yBwpFFCM9ucC&hl=id&pg=PP1&img=1&zoom=3&bul=1&sig=ACfU3U3H_vjv3N12WBHAin_fEPXlVvsM8w&w=1280"
         ),
@@ -24,7 +24,7 @@ object BooksData {
             3,
             "Berani Tidak Disukai",
             "Berani Tidak Disukai menyajikan jawabannya secara sederhana dan langsung. Berdasarkan teori Alfred Adler, satu dari tiga psikolog terkemuka abad kesembilan belas selain Freud dan Jung, buku ini mengikuti percakapan yang menggugah antara seorang filsuf dan seorang pemuda. ",
-            "Ichiro Kishimi Dan Fumitake Koga",
+            "Ichiro Kishimi\nFumitake Koga",
             "2019",
             "https://books.google.co.id/books/publisher/content?id=GV68DwAAQBAJ&hl=id&pg=PP1&img=1&zoom=3&bul=1&sig=ACfU3U0vYajuiyv4Xg1TTLqaFswEG71_6w&w=1280"
         ),

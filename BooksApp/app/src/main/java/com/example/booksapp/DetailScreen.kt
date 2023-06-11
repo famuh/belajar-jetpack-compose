@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -38,74 +39,67 @@ fun DetailContent(
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
-            .padding(8.dp)
+            .padding(20.dp)
     ) {
+        Spacer(modifier = Modifier.height(20.dp))
 
         Box {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AsyncImage(
-                    model = BooksData.books[itemIndex],
+                    model = BooksData.books[itemIndex].imageUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .width(80.dp)
-                        .height(100.dp)
-                        .clip(
-                            CircleShape
-                        )
+                        .width(100.dp)
+                        .height(120.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
                         text = "Judul Buku",
                         color = Color.DarkGray,
-                        fontSize = 10.sp
+                        fontSize = 14.sp
                     )
                     Text(
                         text = BooksData.books[itemIndex].name,
-                        fontSize = 12.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
-//                        style = MaterialTheme.typography.h5.copy(
-//                            fontWeight = FontWeight.ExtraBold
-//                        ),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         text = "Penulis",
                         color = Color.DarkGray,
-                        fontSize = 10.sp
+                        fontSize = 14.sp
                     )
                     Text(
                         text = BooksData.books[itemIndex].author,
-                        fontSize = 12.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
-//                        style = MaterialTheme.typography.h5.copy(
-//                            fontWeight = FontWeight.ExtraBold
-//                        ),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         text = "Tahun Terbit", color = Color.DarkGray,
-                        fontSize = 10.sp
+                        fontSize = 14.sp
                     )
                     Text(
-                        text = BooksData.books[itemIndex].published, fontSize = 12.sp,
+                        text = BooksData.books[itemIndex].published,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Deskripsi",
             color = Color.DarkGray,
-            fontSize = 10.sp
+            fontSize = 14.sp
         )
         Text(
             text = BooksData.books[itemIndex].description,
-            fontSize = 10.sp
+            fontSize = 18.sp
         )
     }
 
